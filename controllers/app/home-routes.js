@@ -38,7 +38,7 @@ router.get("/", (req, res) => {
         res.status(500).json(err);
     });
 });
-///-------post--------///
+//post
 router.get("/post/:id", (req, res) => {
     Post.findOne({
             where: {
@@ -81,3 +81,28 @@ router.get("/post/:id", (req, res) => {
             res.status(500).json(err);
         });
 });
+//-----------------/login-----------------//
+router.get("/login", (req, res) => {
+    if (req.session.loggedIn) {
+        res.redirect("/");
+        return;
+    }
+
+    res.render("login");
+});
+
+router.get("/signup", (req, res) => {
+    if (req.session.loggedIn) {
+        res.redirect("/");
+        return;
+    }
+    //---------render signup---------//
+    res.render("signup");
+});
+
+router.get("*", (req, res) => {
+    /////res.redurect //////////
+    res.status(404).send("unable to go there....");
+});
+
+module.exports = router;
