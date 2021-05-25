@@ -81,7 +81,7 @@ router.get("/post/:id", (req, res) => {
             res.status(500).json(err);
         });
 });
-//-----------------/login-----------------//
+//login
 router.get("/login", (req, res) => {
     if (req.session.loggedIn) {
         res.redirect("/");
@@ -96,12 +96,11 @@ router.get("/signup", (req, res) => {
         res.redirect("/");
         return;
     }
-    //---------render signup---------//
+    //render signup
     res.render("signup");
 });
 
 router.get("*", (req, res) => {
-    /////res.redurect //////////
     res.status(404).send("unable to go there....");
 });
 
