@@ -4,25 +4,37 @@ const sequelize = require("../config/connection");
 const { User, Post, Comment } = require("../models");
 //ROUTERget//
 router.get("/", (req, res) => {
-            Post.findAll({
-                    attributes: ["id", "title", "content", "created_at"],
-                    include: [{
-                            model: Comment,
-                            attributes: ["id", "comment_text", "post_id", "user_id", "created_at"],
-                            include: {
-                                model: User,
-                                attributes: ["username"],
-                            },
-                        },
-                        {
-                            model: User,
-                            attributes: ["username"],
-                        },
-                    ],
+    Post.findAll({
+            attributes: ["id", "title", "content", "created_at"],
+            include: [{
+                    model: Comment,
+                    attributes: ["id", "comment_text", "post_id", "user_id", "created_at"],
+                    include: {
+                        model: User,
+                        attributes: ["username"],
+                    },
+                },
+                {
+                    model: User,
+                    attributes: ["username"],
+                },
+            ],
+        })
+        .then((dbPostData) => {
+            const posts = dbPostData.map((post) =>
+                post.get({
+                    plain: true,
                 })
-                .then((dbPostData) => {
-                        const posts = dbPostData.map((post) =>
-                            post.get({
-                                plain: true,
-                            })
-                        );
+            );
+            //rendering
+            res.render("homepage", {
+                posts,
+                loggedIn: req.session.loggedIn,
+            });
+        })
+
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+    });
+});
