@@ -14,3 +14,21 @@ const hbs = exphbs.create({
 const session = require("express-session");
 //connect-session-sequelize
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+//sess
+const sess = {
+    secret: "mysecret",
+    //cookie
+    cookie: {},
+    resave: false,
+    saveUninitialized: true,
+    store: new SequelizeStore({
+        db: sequelize,
+    }),
+};
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
+
+app.use(session(sess));
